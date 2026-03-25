@@ -1,0 +1,16 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "pbl-orchestrator",
+  "instructions": [
+    "README.md",
+    "prompts/*.md",
+    ".opencode/commands/*.md"
+  ],
+  "watcher": {
+    "ignore": [
+      "__pycache__/**",
+      ".pytest_cache/**",
+      "archive/**"
+    ]
+  }
+}
