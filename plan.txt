@@ -1,0 +1,95 @@
+PBL native workflow plan
+
+1. Teacher refines or selects the discussion topic.
+2. Material researcher searches the web or available knowledge sources and assembles a diversified material pack.
+3. Teacher gives a short teaching hook anchored to the material pack.
+4. Student gives an initial view.
+5. Free discussion runs in short turns until the topic is meaningfully exhausted.
+6. Student gives a synthesis and actively closes the free discussion.
+7. Teacher asks 1 to 3 follow-up questions.
+8. Student answers all follow-up questions in one response.
+9. Evaluator assesses both the student's answer and the discussion process.
+10. Teacher gives final feedback.
+
+Local-context policy
+
+- Every subagent only receives a role packet assembled by the orchestrator.
+- A role packet may contain:
+  - the current topic
+  - the teacher hook when relevant
+  - the full curated material pack assembled after topic selection
+  - the full discussion transcript when relevant for speaking roles
+  - a compact rolling summary of the discussion state
+  - a problem-status table and unresolved discussion points
+  - TA-prepared must-discuss points, likely misreadings, and trigger questions when relevant
+  - the role's own latest state snapshot when relevant
+- Visibility windows:
+  - `material_researcher`: topic + teacher hook only
+  - `peer_low`: topic + full material pack + full discussion transcript + rolling summary
+  - `student`: topic + full material pack + full discussion transcript + rolling summary
+  - `peer_high`: topic + teacher hook + full material pack + full discussion transcript + rolling summary
+  - `ta`: topic + teacher hook + full material pack + full discussion transcript + rolling summary + must-discuss points
+  - `moderator`: topic + full material pack + full discussion transcript + rolling summary + speaker state table + problem-status table + must-discuss points
+  - `teacher`: topic + material pack when relevant + teacher hook + stage summary only
+  - `evaluator`: topic + free-discussion summary + student final answer + teacher questions
+  - `summarizer`: latest chunk only, not the entire historical transcript
+
+Material-pack rule
+
+- After the topic is selected and before the student gives an initial view, the orchestrator must call a dedicated material researcher.
+- The material researcher must return at least 5 materials.
+- Each material must be 200 to 400 Chinese characters long.
+- The set must contain substantial diversity: different angles, different evidence types, and preferably some tensions or contradictions.
+- The material pack should prioritize concrete cases, reported facts, studies, statistics, institutional statements, or sharply differing commentaries instead of generic summaries.
+- During discussion, the group should rely on the material pack rather than only abstract opinion exchange.
+- Materials may come from the web or from an available local knowledge source, but the final material pack must be normalized into short, comparable entries with stable labels such as `材料1` to `材料6`.
+- During discussion, speakers must analyze material content, not merely cite labels or mention which material number they agree with.
+
+Two-stage generation rule
+
+- Before every speaking turn, the subagent first forms an internal state card from visible information only, then must explicitly check that card before generating the outward utterance.
+- The state card includes:
+  1. current understanding
+  2. current stance
+  3. main uncertainty
+  4. target to respond to
+  5. turn goal
+- Then the subagent generates the outward utterance from that state card rather than skipping directly to a response.
+- The outward response never exposes the internal state card unless explicitly requested in JSON form.
+
+Round compression rule
+
+- After each free-discussion turn, update a hidden rolling summary with:
+  1. each role's current stance
+  2. the main disagreement
+  3. unresolved questions
+  4. which materials have been used, misused, or left unexamined
+- Keep the rolling summary concise so later role packets stay local and bounded.
+
+Problem-tracking rule
+
+- Before free discussion, the TA should prepare a compact list of must-discuss points, likely misreadings, and trigger questions based on the full material pack.
+- During free discussion, the orchestrator and moderator must maintain a problem-status table rather than a target round count.
+- Each key discussion point should be tracked as `open`, `partial`, or `closed`.
+- Do not end free discussion while a must-discuss point is still untouched, or while a core problem remains only superficially addressed.
+- The TA should proactively intervene when a must-discuss point has not yet been discussed or when the group keeps citing materials without analyzing their actual content.
+- During free discussion, the orchestrator must require structured JSON from the TA, student, `peer_high`, and `peer_low`, and keep each role's latest end-of-discussion judgment available to the moderator.
+- At minimum, each speaking-role JSON should expose whether the role believes discussion can end, whether the role still wants to speak, and what unresolved confusion or issue remains.
+
+Ending rule
+
+- Do not stop because a target round count has been reached.
+- Continue while there is still useful work to do, including any of these cases:
+  1. a disagreement is still active
+  2. a mechanism or causal link is still unclear
+  3. a misunderstanding has not been corrected
+  4. someone has a clear desire to respond
+  5. the group has not yet compared competing explanations
+  6. a must-discuss point has not yet been addressed
+  7. the materials have been named but not substantively analyzed
+- Stop only when the rolling summary and latest turns both show that new turns would likely add little beyond repetition or minor restatement.
+- Stop only when all of the following are true at the same time:
+  1. the TA marks every must-discuss point as answered and does not report remaining clarification needs
+  2. the student reports no remaining confusion and no desire to continue speaking
+  3. both peers report no meaningful desire to continue speaking and no unresolved point they need to raise
+  4. the moderator can verify the above role states from the latest structured JSON together with the problem-status table
