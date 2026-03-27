@@ -13,12 +13,23 @@
 
 ## 目录结构
 
-- `prompts/`：角色提示词与语气说明
-- `.opencode/agents/`：OpenCode agents，包括编排器、材料搜索、教师、学生、助教、同伴、主持人、总结器和评估器
-- `.opencode/commands/`：项目内斜杠命令，例如 `/pbl`
+- `skills/agents/`：规范化单一事实源；每个 agent 的职责、规则、状态契约与运行时镜像参考都定义在这里
+- `skills/shared/`：学生、同伴等角色共用的提示词复用片段
+- `.opencode/agents/`：OpenCode runtime agent 适配层，包括编排器、材料搜索、教师、学生、助教、同伴、主持人、总结器和评估器
+- `.opencode/commands/`：项目内斜杠命令适配层，例如 `/pbl`
+- `prompts/`：角色提示词与语气说明的辅助文档层
 - `archive/legacy-root/`：已归档的 Python 原型运行时（`src/`、`skills/`）
 - `archive/legacy-opencode/`：已归档的 OpenCode skill 原型文件与生成依赖
 - `archive/legacy-root/data/sessions/`：已归档的示例 session 数据
+
+## 提示词组织
+
+- 现在采用 skill-first 架构：`skills/agents/` 是唯一应优先维护的主源。
+- skill 文档首先描述角色职责、可见信息、行为规则、状态卡与输出契约，而不是把 `.opencode/` 当作主要生成目标。
+- `.opencode/agents/`、`.opencode/commands/` 和 `prompts/` 是运行时适配或辅助文档层，服务于当前 OpenCode 目录组织。
+- 学生、`peer_high`、`peer_low`、助教这类讨论参与者的共性要求继续抽到 `skills/shared/` 中，便于复用与比对。
+- 若修改了 `skills/agents/` 中的核心规则，应同时核对对应的 `.opencode/` 与 `prompts/` 文件是否仍保持一致。
+- 这样既能保证运行时功能不受影响，也能把“单一事实源”稳定收敛到 skill 层。
 
 ## 运行方式
 
