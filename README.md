@@ -12,7 +12,7 @@
 
 ## 目录结构
 
-- `skills/agents/`：规范化单一事实源；每个 agent 的职责、规则、状态契约与 command mirror 都定义在这里
+- `skills/agents/`：规范化单一事实源；每个 agent 的职责、规则、状态契约与输出契约都定义在这里
 - `skills/shared/`：多个讨论角色共用的提示词片段
 - `.opencode/agents/`：OpenCode runtime agent 适配层
 - `.opencode/commands/`：项目内斜杠命令适配层，例如 `/pbl`
