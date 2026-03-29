@@ -1,0 +1,19 @@
+---
+name: material-grounding
+description: Shared constraints for grounding discussion turns in the source materials.
+---
+
+# 材料驱动复用片段
+
+## 适用角色
+
+- `pbl-student`
+- `pbl-ta`
+- `pbl-peer-high`
+- `pbl-peer-low`
+
+## 复用目的
+
+- 统一强调讨论必须围绕材料中的具体内容展开。
+- 统一避免“只报材料编号”的空转式引用。
+- 统一要求把材料里的观点、例子、条件、因果链、误读点或冲突内容说出来。

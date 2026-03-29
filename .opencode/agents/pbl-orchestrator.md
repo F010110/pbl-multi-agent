@@ -20,11 +20,11 @@ steps: 36
 ## 适配定位
 
 - 本文件仅作为 OpenCode runtime 适配层。
-- 完整工作流规则、状态推进、输出契约与命令要求以 `skills/agents/pbl-orchestrator.md` 为准。
+- 完整工作流规则、状态推进、输出契约与命令要求以 `.opencode/skills/pbl-orchestrator/SKILL.md` 为准。
 
 ## 绑定关系
 
-- 对应 skill：`skills/agents/pbl-orchestrator.md`
+- 对应 skill：`.opencode/skills/pbl-orchestrator/SKILL.md`
 - 对应命令：`.opencode/commands/pbl.md`
 
 ## Runtime 提示

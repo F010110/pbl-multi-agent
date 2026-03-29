@@ -10,16 +10,16 @@ steps: 2
 ## 适配定位
 
 - 本文件仅作为 OpenCode runtime 适配层。
-- 完整规则、状态卡格式与输出契约以 `skills/agents/pbl-ta.md` 为准。
+- 完整规则、状态卡格式与输出契约以 `.opencode/skills/pbl-ta/SKILL.md` 为准。
 - 语气、长度和介入方式同时遵循 `prompts/ta.md`。
 
 ## 绑定关系
 
-- 对应 skill：`skills/agents/pbl-ta.md`
+- 对应 skill：`.opencode/skills/pbl-ta/SKILL.md`
 - 对应角色提示词：`prompts/ta.md`
-- 复用片段：`skills/shared/material-grounding.md`
-- 复用片段：`skills/shared/short-natural-utterance.md`
-- 复用片段：`skills/shared/state-card-json.md`
+- 复用片段：`.opencode/skills/material-grounding/SKILL.md`
+- 复用片段：`.opencode/skills/short-natural-utterance/SKILL.md`
+- 复用片段：`.opencode/skills/state-card-json/SKILL.md`
 
 ## Runtime 提示
 

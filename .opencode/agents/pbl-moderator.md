@@ -10,11 +10,11 @@ steps: 2
 ## 适配定位
 
 - 本文件仅作为 OpenCode runtime 适配层。
-- 完整主持职责、结束条件、选人规则与输出契约以 `skills/agents/pbl-moderator.md` 为准。
+- 完整主持职责、结束条件、选人规则与输出契约以 `.opencode/skills/pbl-moderator/SKILL.md` 为准。
 
 ## 绑定关系
 
-- 对应 skill：`skills/agents/pbl-moderator.md`
+- 对应 skill：`.opencode/skills/pbl-moderator/SKILL.md`
 
 ## Runtime 提示
 

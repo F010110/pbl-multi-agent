@@ -4,7 +4,7 @@
 
 ## 架构
 
-- 主流程由 OpenCode 原生编排完成，核心讨论逻辑维护在 `skills/agents/`。
+- 主流程由 OpenCode 原生编排完成，核心讨论逻辑维护在标准 skill 目录 `.opencode/skills/` 中。
 - `pbl-orchestrator` 负责串联选题、材料包、自由讨论、追问、评估与教师反馈。
 - 题目确定后会先调用 `pbl-material-researcher` 生成可比较、最好带冲突的材料包，再进入讨论。
 - 教师、学生、助教、两位同伴、主持人、总结器和评估器都以独立子 agent 形式运行。
@@ -12,19 +12,21 @@
 
 ## 目录结构
 
-- `skills/agents/`：规范化单一事实源；每个 agent 的职责、规则、状态契约与输出契约都定义在这里
-- `skills/shared/`：多个讨论角色共用的提示词片段
+- `.opencode/skills/`：标准 skill 单一事实源；每个 agent 的职责、规则、状态契约与输出契约都定义在这里
+- `.opencode/skills/material-grounding/`、`.opencode/skills/short-natural-utterance/`、`.opencode/skills/state-card-json/`：多个讨论角色共用的共享 skills
 - `.opencode/agents/`：OpenCode runtime agent 适配层
 - `.opencode/commands/`：项目内斜杠命令适配层，例如 `/pbl`
 - `prompts/`：部分角色的语气与表达辅助文档
+- `archived/skills-legacy/`：旧 `skills/` 目录的归档镜像，仅用于历史比对，不再作为当前主源
 - `plan.txt`：当前工作流阶段与 local-context policy 的简要规划文本
 
 ## 提示词组织
 
-- 当前采用 skill-first 架构：`skills/agents/` 是优先维护的主源。
+- 当前采用标准 skill-first 架构：`.opencode/skills/` 是优先维护的主源。
 - skill 文档先定义角色职责、可见信息、行为规则、状态卡与输出契约。
 - `.opencode/agents/`、`.opencode/commands/` 和 `prompts/` 主要承担运行时适配或辅助说明，不应先于 skill 修改。
-- 讨论参与者的共性要求继续抽到 `skills/shared/` 中，便于复用与比对。
+- 讨论参与者的共性要求继续抽到共享 skills 中，便于复用与比对。
+- 原 `skills/` 目录已归档到 `archived/skills-legacy/`，避免丢失任何既有指令，同时不再参与当前架构。
 - 修改核心规则后，应同步核对对应的 `.opencode/` 与 `prompts/` 是否仍一致。
 
 ## 运行方式
@@ -64,7 +66,7 @@ opencode
 
 ## 讨论流程
 
-当前工作流遵循 `plan.txt` 与 `skills/agents/pbl-orchestrator.md` 中的阶段约束：
+当前工作流遵循 `plan.txt` 与 `.opencode/skills/pbl-orchestrator/SKILL.md` 中的阶段约束：
 
 1. 教师选择或细化讨论主题。
 2. 材料搜索 agent 在网上或可用知识源中整理至少 5 条材料，形成材料包。

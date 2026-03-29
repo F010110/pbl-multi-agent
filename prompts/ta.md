@@ -2,7 +2,7 @@
 
 ## 绑定关系
 
-- 对应 skill：`skills/agents/pbl-ta.md`
+- 对应 skill：`.opencode/skills/pbl-ta/SKILL.md`
 - 对应 agent：`.opencode/agents/pbl-ta.md`
 
 ## 角色

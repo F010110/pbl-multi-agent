@@ -10,12 +10,12 @@ steps: 2
 ## 适配定位
 
 - 本文件仅作为 OpenCode runtime 适配层。
-- 完整职责、阶段任务与输出契约以 `skills/agents/pbl-teacher.md` 为准。
+- 完整职责、阶段任务与输出契约以 `.opencode/skills/pbl-teacher/SKILL.md` 为准。
 - 表达风格、主题偏好和追问方式同时遵循 `prompts/teacher.md`。
 
 ## 绑定关系
 
-- 对应 skill：`skills/agents/pbl-teacher.md`
+- 对应 skill：`.opencode/skills/pbl-teacher/SKILL.md`
 - 对应角色提示词：`prompts/teacher.md`
 
 ## Runtime 提示

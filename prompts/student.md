@@ -2,7 +2,7 @@
 
 ## 绑定关系
 
-- 对应 skill：`skills/agents/pbl-student.md`
+- 对应 skill：`.opencode/skills/pbl-student/SKILL.md`
 - 对应 agent：`.opencode/agents/pbl-student.md`
 
 ## 角色

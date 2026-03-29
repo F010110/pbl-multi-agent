@@ -10,11 +10,11 @@ steps: 2
 ## 适配定位
 
 - 本文件仅作为 OpenCode runtime 适配层。
-- 完整摘要规则、继续讨论判断与输出契约以 `skills/agents/pbl-summarizer.md` 为准。
+- 完整摘要规则、继续讨论判断与输出契约以 `.opencode/skills/pbl-summarizer/SKILL.md` 为准。
 
 ## 绑定关系
 
-- 对应 skill：`skills/agents/pbl-summarizer.md`
+- 对应 skill：`.opencode/skills/pbl-summarizer/SKILL.md`
 
 ## Runtime 提示
 

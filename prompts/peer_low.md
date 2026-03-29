@@ -2,7 +2,7 @@
 
 ## 绑定关系
 
-- 对应 skill：`skills/agents/pbl-peer-low.md`
+- 对应 skill：`.opencode/skills/pbl-peer-low/SKILL.md`
 - 对应 agent：`.opencode/agents/pbl-peer-low.md`
 
 ## 角色

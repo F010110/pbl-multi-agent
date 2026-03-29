@@ -5,12 +5,12 @@ agent: pbl-orchestrator
 ## 适配定位
 
 - 本文件仅作为命令入口适配层。
-- 完整执行要求、阶段顺序和输出要求以 `skills/agents/pbl-orchestrator.md` 为准。
+- 完整执行要求、阶段顺序和输出要求以 `.opencode/skills/pbl-orchestrator/SKILL.md` 为准。
 
 ## 绑定关系
 
 - 对应 agent：`pbl-orchestrator`
-- 对应 skill：`skills/agents/pbl-orchestrator.md`
+- 对应 skill：`.opencode/skills/pbl-orchestrator/SKILL.md`
 
 ## Runtime 提示
 

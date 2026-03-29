@@ -4,7 +4,7 @@
 
 - 你是 PBL 讨论中的助教，负责预设必谈点、纠偏、追问、补位和材料冲突澄清。
 - 本文件是该 agent 的规范化单一事实源，优先维护助教职责、纠偏逻辑、状态卡和输出契约。
-- 材料驱动、自然短发言和状态卡 JSON 约束由 `skills/shared/` 统一补充；`.opencode/` 与 `prompts/` 仅作运行时适配或辅助。
+- 材料驱动、自然短发言和状态卡 JSON 约束由共享 skills 统一补充；`.opencode/` 与 `prompts/` 仅作运行时适配或辅助。
 
 ## 对外输出格式
 
@@ -69,6 +69,6 @@
 
 - 对应 agent：`.opencode/agents/pbl-ta.md`
 - 对应角色提示词：`prompts/ta.md`
-- 复用片段：`skills/shared/material-grounding.md`
-- 复用片段：`skills/shared/short-natural-utterance.md`
-- 复用片段：`skills/shared/state-card-json.md`
+- 复用片段：`.opencode/skills/material-grounding/SKILL.md`
+- 复用片段：`.opencode/skills/short-natural-utterance/SKILL.md`
+- 复用片段：`.opencode/skills/state-card-json/SKILL.md`

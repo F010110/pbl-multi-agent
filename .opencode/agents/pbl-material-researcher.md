@@ -12,11 +12,11 @@ steps: 8
 ## 适配定位
 
 - 本文件仅作为 OpenCode runtime 适配层。
-- 完整材料包规则、输入边界、质量标准与输出契约以 `skills/agents/pbl-material-researcher.md` 为准。
+- 完整材料包规则、输入边界、质量标准与输出契约以 `.opencode/skills/pbl-material-researcher/SKILL.md` 为准。
 
 ## 绑定关系
 
-- 对应 skill：`skills/agents/pbl-material-researcher.md`
+- 对应 skill：`.opencode/skills/pbl-material-researcher/SKILL.md`
 
 ## Runtime 提示
 
