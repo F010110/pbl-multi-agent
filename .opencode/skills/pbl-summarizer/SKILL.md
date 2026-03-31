@@ -31,6 +31,12 @@ description: Defines the summarizer role for context compression and discussion-
 - 当仍存在分歧、未讲清机制、待纠正误解、可比较的竞争解释，或有人明显想回应时，应明确判定继续讨论更有价值。
 - 只有当新一轮大概率只会重复、附和或做极小改写时，才判定接近穷尽。
 
+## 输出前轻检查
+
+- 返回前只做最小检查：摘要忠实于传入片段、长度保持简短即可。
+- 如果要求返回 JSON，尽量保证结构可用。
+- 不要为了逐条自检而反复重写摘要。
+
 ## 绑定关系
 
 - 对应 agent：`.opencode/agents/pbl-summarizer.md`

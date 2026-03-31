@@ -13,7 +13,7 @@ permission:
   grep: deny
   list: deny
   question: deny
-steps: 36
+steps: 100
 ---
 # `pbl-orchestrator`
 

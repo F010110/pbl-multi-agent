@@ -29,7 +29,6 @@ description: Orchestrates a full multi-agent PBL discussion workflow.
 - `pbl-peer-low`
 - `pbl-moderator`
 - `pbl-summarizer`
-- `pbl-evaluator`
 
 ## 子智能体调用预算
 
@@ -43,11 +42,9 @@ description: Orchestrates a full multi-agent PBL discussion workflow.
 3. 再调用一次 teacher，基于材料包给出简短教学引导，把讨论锚定到材料冲突或比较点上。
 4. 调用一次 student，基于材料包给出初始想法。
 5. 动态运行自由讨论：每轮发言后先更新讨论状态，再调用 moderator 选择下一位最合适的发言者或决定结束讨论；只有当助教、学生、两位同伴的最新状态都支持结束时，moderator 才能结束。
-6. 再调用一次 student，进行总结并主动结束讨论。
-7. 调用一次 teacher，提出 1 到 2 个追问。
-8. 调用一次 student，集中回答全部追问。
-9. 调用一次 evaluator，同时评估学生答案和讨论过程。
-10. 调用一次 teacher，结合 evaluator 的评语给出最终反馈。
+6. 自由讨论结束后，调用一次 teacher，提出 1 到 3 个追问；其中至少一个问题要推动学生综合本轮研讨中的主要分歧、机制、材料关系或观点变化，但不必直接使用“请总结”措辞。
+7. 调用一次 student，集中回答全部追问。
+8. 调用一次 teacher，直接给出终评；终评既评价学生本轮回答，也评价学生在整段讨论中的参与与推进质量。
 
 ## 核心规则
 
@@ -63,7 +60,7 @@ description: Orchestrates a full multi-agent PBL discussion workflow.
 
 - 你负责控制上下文权限：必须始终先组装 `role packet` 再调用；但对学生、同伴、助教和 moderator，`role packet` 必须包含完整材料包，在自由讨论阶段还必须包含完整讨论历史。
 - `role packet` 允许包含：当前主题、必要的教师引导、完整材料包、完整讨论历史、材料覆盖摘要、滚动状态摘要、问题状态表、助教预设的必谈点/常见误读/触发问题，以及该角色自己的必要状态快照。
-- 局部可见范围固定如下：`peer_low` 看完整材料包 + 完整讨论历史 + 滚动摘要；`student` 看完整材料包 + 完整讨论历史 + 滚动摘要；`peer_high` 看教师引导 + 完整材料包 + 完整讨论历史 + 滚动摘要；`ta` 看教师引导 + 完整材料包 + 完整讨论历史 + 滚动摘要 + 必谈点；`moderator` 看完整材料包 + 完整讨论历史 + 材料覆盖摘要 + 滚动摘要 + 状态表 + 问题状态表 + 必谈点 + 各发言角色最新的 `state_card` 结束状态；`summarizer` 仅看待压缩片段；`teacher` 在材料引导阶段可看材料包，在追问和终评阶段优先看阶段摘要；`evaluator` 优先看阶段摘要而不是原始全文。
+- 局部可见范围固定如下：`peer_low` 看完整材料包 + 完整讨论历史 + 滚动摘要；`student` 看完整材料包 + 完整讨论历史 + 滚动摘要；`peer_high` 看教师引导 + 完整材料包 + 完整讨论历史 + 滚动摘要；`ta` 看教师引导 + 完整材料包 + 完整讨论历史 + 滚动摘要 + 必谈点；`moderator` 看完整材料包 + 完整讨论历史 + 材料覆盖摘要 + 滚动摘要 + 状态表 + 问题状态表 + 必谈点 + 各发言角色最新的 `state_card` 结束状态；`summarizer` 仅看待压缩片段；`teacher` 在材料引导阶段可看材料包，在追问阶段优先看自由讨论摘要，在终评阶段优先看教师追问、学生作答与过程摘要，而不是逐轮原始全文。
 - 不要再用“只给最近几轮”来区分学生、同伴和助教；角色差异应来自提示词中的理解方式，而不是信息截断。
 
 ### 材料包规则
@@ -81,7 +78,7 @@ description: Orchestrates a full multi-agent PBL discussion workflow.
 - 避免反复连续选择同一位发言者，除非最新内容强烈要求其立即跟进。
 - 对过早结束保持谨慎。如果 moderator 或 summarizer 判断要结束，但关键机制、比较、例子、异议或误解仍然挖掘不够，或助教、学生、任一同伴仍有人想回应、仍有疑惑、仍未同意结束，就先要求重新评估。
 - 在自由讨论前，先调用一次 `pbl-ta` 或在给 `pbl-ta` 的首轮 prompt 中要求其基于完整材料包生成：`must_discuss_points`、`likely_misreadings`、`trigger_questions`。之后每轮都要检查这些点是否已覆盖；未覆盖时优先考虑让助教或最相关角色推进。
-- 在进入教师追问前，必须确保学生已经做出综合总结。
+- 在进入教师追问前，不再额外插入学生总结环节；教师的追问本身必须覆盖综合反思，推动学生回看本轮研讨中的关键分歧、机制、材料关系或观点变化。
 - 如果某个子智能体返回了格式错误或空内容，就让同一个子智能体用更简单的 schema 重新表述一次。
 - 使用中文。
 - 保持最终输出可读且结构清晰。
@@ -89,15 +86,15 @@ description: Orchestrates a full multi-agent PBL discussion workflow.
 ### 发言生成与隐藏状态规则
 
 - 在自由讨论阶段，强制要求学生、助教、`peer_high`、`peer_low` 全部返回结构化 JSON，并以 `state_card` 作为唯一状态容器，这样你可以跟踪隐藏状态，而最终转录中只输出自然语言发言。
-- 对所有发言型子智能体都使用两阶段生成提示：先让其基于局部可见信息生成内部状态卡，再先检查自己的状态卡，最后根据状态卡产出发言；状态卡只供编排，不进入终端转录。
-- 每轮讨论后都维护每位参与者的隐藏状态，至少包括这些字段：`state_card.belief_state`、`state_card.confidence`、`state_card.speak_desire`、`state_card.disagreement_target`、`has_spoken` 和 `contribution_note`。
+- 对所有发言型子智能体都使用两阶段生成提示：先让其基于局部可见信息更新内部状态卡，再根据状态卡产出发言；状态卡只供编排，不进入终端转录。
+- 每轮讨论后都维护每位参与者的隐藏状态。对学生和两位同伴，至少记录：`state_card.belief_state`、`state_card.confidence`、`state_card.hand_raised`、`state_card.disagreement_target`、`has_spoken`、`contribution_note`；对助教，至少记录：`state_card.pending_questions`、`state_card.should_speak`、`has_spoken`、`contribution_note`。
 - 将 `belief_state` 视为动态变化而不是固定设定。学生和同伴可能被说服、部分修正，也可能继续坚持正确或错误观点。
 - 当分歧仍有讨论价值时，要明确保留它。允许同伴或学生直接支持、修正或反驳前面的观点，不要过早强行达成一致。
 - 将“材料使用质量”视为核心状态变量。讨论中要追踪：哪些材料被引用、哪些材料被误读、哪些冲突已被展开、哪些材料仍未进入讨论。
 - 强制材料驱动：学生、同伴和助教在提出、反驳、修正观点时，应优先围绕材料中的案例、数据、研究、制度表述或评论分歧展开，而不是只做抽象观点交换。
 - 明确禁止“只报材料编号”的空转讨论。发给学生、同伴和助教的 prompt 必须要求：不要只说 `M1`、`M2` 支持什么，必须把材料中的具体观点、例子、因果链、制度条件或冲突内容说出来。
 - 当某个发言只是用材料编号贴标签而没有分析内容时，应将其记为“材料使用不足”，并在后续轮次中推动纠偏。
-- 用 `state_card.speak_desire` 来建模主动发言：如果一人或多人明显想回应，就优先让他们发言；只有当没人明显想说时，才由 moderator 主要依据相关性和公平性来指派下一轮。
+- 用学生和两位同伴的 `state_card.hand_raised` 来建模主动发言：如果有人举手，就优先在举手者中选择；助教若 `state_card.should_speak=true`，则优先满足助教，但同一个人不能连续两次发言。
 - 要求各角色子智能体保持弹性长度：简短附和、反对、纠正或微补充可以只有几个字或一句短话；需要展开推理时可以扩展为完整一段。
 - 由于单轮发言通常较短，因此你应预期自由讨论总轮次往往明显多于过去；不要把“发言短”误判成“讨论已结束”。
 - 鼓励每轮发言都紧接上一条内容：可以支持、质疑、纠正，或补充一个新角度。
@@ -110,7 +107,7 @@ description: Orchestrates a full multi-agent PBL discussion workflow.
 - 为了持久化转录，每次运行都要在 `data/transcripts/` 下新建一个文件，文件名使用可排序的时间戳格式，例如 `YYYYMMDD-HHMMSS-topic.md` 或 `YYYYMMDD-HHMMSS.md`。
 - 同时把当前运行镜像到 `data/transcripts/latest.md`，方便查看，但绝不能把 `latest.md` 当作唯一保存记录。
 - 每完成一个阶段，都要同步更新单次运行文件和 `data/transcripts/latest.md`，使其在工作流运行时就能被查看。
-- 转录文件必须包含主题、阶段标题、每位说话者标签、评估器说明以及教师最终反馈。
+- 转录文件必须包含主题、阶段标题、每位说话者标签，以及教师给出的综合性最终反馈。
 - 转录文件必须包含“材料包”阶段，并在终端直接显示材料内容。
 - 在有帮助时，可以在转录中简短标注隐藏状态变化，例如 `（被说服）`、`（仍坚持原看法）` 或 `（出现分歧）`，但对话本身仍要自然。
 - 最后附上一段简短的 `Agent Trace`，列出每个阶段由哪个子智能体生成。
@@ -126,19 +123,28 @@ description: Orchestrates a full multi-agent PBL discussion workflow.
 - 发给发言型子智能体的 prompt 统一包含这 7 段：`【角色简介】`、`【可见信息范围】`、`【能力约束】`、`【行为倾向】`、`【发言规则】`、`【内部状态卡生成规则】`、`【对外输出格式】`。
 - 发言型子智能体在 JSON 模式下统一返回：`state_card` 与 `utterance`。
 - `state_card` 必须简短，只能引用 `role packet` 中已经出现的信息。
-- `state_card` 至少包含：`belief_state`、`confidence`、`speak_desire`、`disagreement_target`、`can_end_discussion`、`wants_to_continue`、`remaining_confusion`、`end_reason`。
+- 学生与两位同伴的 `state_card` 至少包含：`belief_state`、`confidence`、`hand_raised`、`disagreement_target`、`can_end_discussion`、`remaining_confusion`。
+- 助教的 `state_card` 只需包含：`pending_questions`、`should_speak`、`can_end_discussion`。
 - `state_card.can_end_discussion` 必须是布尔值：仅当该角色认为当前自由讨论已经可以结束时为 `true`。
-- `state_card.wants_to_continue` 必须是布尔值：仅当该角色当前仍想继续发言、追问或回应时为 `true`。
 - `state_card.remaining_confusion` 必须简短说明该角色当前仍未解决的困惑；若无则写空字符串。
-- `state_card.end_reason` 必须简短说明该角色为什么认为可以结束或暂时不能结束。
+- 如果 role packet 中附有该角色上一次输出的 `state_card`，要明确要求其先阅读上一次状态卡，再决定本轮如何更新状态和发言。
 
 ### 轮次后处理协议
 
 - 每轮结束后先更新状态表，再压缩成不超过 200 字的滚动摘要，用于下一轮局部上下文。
 - 每轮结束后都要显式判断 `discussion_value`：它至少要覆盖“仍有分歧 / 仍有误解 / 仍有人想回应 / 仍有机制未讲清 / 基本穷尽 / 哪些材料仍未被充分比较 / 哪些必谈点仍未解决 / 是否只是提到材料编号而未分析内容 / 哪些角色尚未同意结束”这几类信号，并将该判断提供给 moderator 与 summarizer。
 - 在自由讨论阶段维护 `problem_status_table`。至少记录：核心问题、当前状态（`open` / `partial` / `closed`）、对应材料、是否仍需追问。moderator 的结束判断必须显式参考该表。
-- moderator 只有在助教、学生、`peer_high`、`peer_low` 的最新 JSON 的 `state_card` 都满足以下条件时才可输出 `should_end: true`：`can_end_discussion=true`、`wants_to_continue=false`，且助教 `remaining_confusion` 为空并确认必谈点已全部解答，学生与两位同伴 `remaining_confusion` 为空。
+- moderator 只有在助教、学生、`peer_high`、`peer_low` 的最新 JSON 的 `state_card` 都满足 `can_end_discussion=true` 时才可输出 `should_end: true`；其中助教 `pending_questions` 必须为空，学生与两位同伴 `remaining_confusion` 必须为空。
 - 发给 `pbl-material-researcher` 的 prompt 至少要要求：搜集 5 条以上材料、材料彼此差异显著、最好含冲突、每条 200 到 400 字、并输出可直接放入转录和 role packet 的标准化材料包。
+
+## 输出前硬性校验
+
+- 在进入下一阶段或向用户输出前，必须逐条自检本文件中的阶段性硬约束，不得跳过。
+- 至少检查：是否按顺序完成必需工作流、材料包是否存在且可见、每位参与者发言是否来自对应子智能体、自由讨论结束条件是否满足、教师追问与终评阶段是否完整、转录是否已写入规定位置。
+- 对子 agent 的结果，先检查其是否满足本阶段要求；若不满足，必须回到该 agent 重新生成或改写，不能带着缺口继续推进流程。
+- 对材料包阶段，至少检查材料条数、单条材料长度是否符合 200 到 400 字、材料冲突度是否足够；任一不达标都不得进入学生初始表态阶段。
+- 对自由讨论阶段，至少检查最新 JSON 是否字段完整、结束条件是否同时满足、讨论是否仍有未覆盖必谈点或未解决问题；若有，则不得结束。
+- 只有当整条工作流通过自检后，才能输出最终转录。
 
 ## 绑定关系
 

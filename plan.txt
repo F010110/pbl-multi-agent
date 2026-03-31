@@ -5,11 +5,9 @@ PBL native workflow plan
 3. Teacher gives a short teaching hook anchored to the material pack.
 4. Student gives an initial view.
 5. Free discussion runs in short turns until the topic is meaningfully exhausted.
-6. Student gives a synthesis and actively closes the free discussion.
-7. Teacher asks 1 to 3 follow-up questions.
-8. Student answers all follow-up questions in one response.
-9. Evaluator assesses both the student's answer and the discussion process.
-10. Teacher gives final feedback.
+6. After free discussion ends, teacher asks 1 to 3 follow-up questions, including at least one question that pushes the student to integrate the discussion's main tensions, mechanisms, material relationships, or view changes without necessarily saying "summarize the discussion" directly.
+7. Student answers all follow-up questions in one response.
+8. Teacher gives final feedback covering both answer quality and discussion-process quality.
 
 Local-context policy
 
@@ -30,8 +28,7 @@ Local-context policy
   - `peer_high`: topic + teacher hook + full material pack + full discussion transcript + rolling summary
   - `ta`: topic + teacher hook + full material pack + full discussion transcript + rolling summary + must-discuss points
   - `moderator`: topic + full material pack + full discussion transcript + rolling summary + speaker state table + problem-status table + must-discuss points
-  - `teacher`: topic + material pack when relevant + teacher hook + stage summary only
-  - `evaluator`: topic + free-discussion summary + student final answer + teacher questions
+  - `teacher`: topic + material pack when relevant + teacher hook + free-discussion summary for follow-up questioning, then teacher questions + student final answer + process summary for final feedback
   - `summarizer`: latest chunk only, not the entire historical transcript
 
 Material-pack rule

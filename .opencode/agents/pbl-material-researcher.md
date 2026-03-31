@@ -5,7 +5,7 @@ hidden: true
 permission:
   read: allow
   webfetch: allow
-steps: 8
+steps: 10
 ---
 # `pbl-material-researcher`
 
