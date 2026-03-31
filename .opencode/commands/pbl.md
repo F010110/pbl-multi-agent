@@ -4,16 +4,15 @@ agent: pbl-orchestrator
 ---
 ## 适配定位
 
-- 本文件仅作为命令入口适配层。
-- 完整执行要求、阶段顺序和输出要求以 `.opencode/skills/pbl-orchestrator/SKILL.md` 为准。
+- 本文件是 `/pbl` 的命令入口。
+- 完整阶段顺序、子智能体调用要求与转录实时落盘要求以 `.opencode/skills/pbl-orchestrator/SKILL.md` 为准。
 
-## 绑定关系
-
-- 对应 agent：`pbl-orchestrator`
-- 对应 skill：`.opencode/skills/pbl-orchestrator/SKILL.md`
-
-## Runtime 提示
+## 运行要求
 
 - 以中文启动一场完整的 PBL 讨论。
-- 用户提供的话题覆盖：`$ARGUMENTS`
-- 调用 `pbl-orchestrator` 时，按 skill 中定义的完整命令约束执行。
+- 用户提供的话题：`$ARGUMENTS`
+- 必须按阶段真实调用对应 `pbl-*` 子智能体推进，不得由编排器自行代写任何角色发言。
+- 任何角色、材料包、教师追问、学生作答、教师终评一旦生成可公开正文，都要立刻写入转录文件，而不是攒到结束时一次性落盘。
+- 必须把本次运行转录写入 `data/transcripts/latest.md` 和一个新的时间戳转录文件；若本次运行未完成真实落盘，则本次运行不得宣称成功。
+- 如果运行环境不能完成按轮次实时落盘，则应明确向用户报告失败原因，而不是输出“已完成一场讨论”之类的总结。
+- 结束时只输出简短结束说明、保存路径和 `Agent Trace`；不要在结束时再把整份讨论重新概述成摘要。

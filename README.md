@@ -13,7 +13,6 @@
 ## 目录结构
 
 - `.opencode/skills/`：标准 skill 单一事实源；每个 agent 的职责、规则、状态契约与输出契约都定义在这里
-- `.opencode/skills/material-grounding/`、`.opencode/skills/short-natural-utterance/`、`.opencode/skills/state-card-json/`：多个讨论角色共用的共享 skills
 - `.opencode/agents/`：OpenCode runtime agent 适配层
 - `.opencode/commands/`：项目内斜杠命令适配层，例如 `/pbl`
 - `prompts/`：部分角色的语气与表达辅助文档
@@ -25,7 +24,7 @@
 - 当前采用标准 skill-first 架构：`.opencode/skills/` 是优先维护的主源。
 - skill 文档先定义角色职责、可见信息、行为规则、状态卡与输出契约。
 - `.opencode/agents/`、`.opencode/commands/` 和 `prompts/` 主要承担运行时适配或辅助说明，不应先于 skill 修改。
-- 讨论参与者的共性要求继续抽到共享 skills 中，便于复用与比对。
+- 讨论参与者的共性要求直接并入各自的 agent skill，避免规则分散在多个共享片段中。
 - 原 `skills/` 目录已归档到 `archived/skills-legacy/`，避免丢失任何既有指令，同时不再参与当前架构。
 - 修改核心规则后，应同步核对对应的 `.opencode/` 与 `prompts/` 是否仍一致。
 

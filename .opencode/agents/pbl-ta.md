@@ -17,9 +17,6 @@ steps: 2
 
 - 对应 skill：`.opencode/skills/pbl-ta/SKILL.md`
 - 对应角色提示词：`prompts/ta.md`
-- 复用片段：`.opencode/skills/material-grounding/SKILL.md`
-- 复用片段：`.opencode/skills/short-natural-utterance/SKILL.md`
-- 复用片段：`.opencode/skills/state-card-json/SKILL.md`
 
 ## Runtime 提示
 
