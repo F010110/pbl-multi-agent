@@ -1,12 +1,18 @@
 PBL native workflow plan
 
+Runtime modes
+
+- Full-auto mode: the current default path, exposed through `/pbl-auto`. OpenCode orchestrates the whole discussion by invoking the teacher, material researcher, student, TA, peers, moderator, and summarizer subagents, and writes the transcript in real time.
+- User-participatory mode: a planned extension, exposed through `/pbl-user`. The discussion still follows the same phase order, but the `student` role is no longer assumed to be always represented by `pbl-student`; instead, the runtime may resolve the next student turn to either the student agent or a real user input channel.
+- The two modes should share the same topic-selection, material-pack, moderation, transcript, and teacher-follow-up structure, but the orchestrator should treat them as separate workflows rather than one workflow with inline exceptions.
+
 1. Teacher refines or selects the discussion topic.
 2. Material researcher searches the web or available knowledge sources and assembles a diversified material pack.
 3. Teacher gives a short teaching hook anchored to the material pack.
 4. Student gives an initial view.
 5. Free discussion runs in short turns until the topic is meaningfully exhausted.
 6. After free discussion ends, teacher asks 1 to 3 follow-up questions, including at least one question that pushes the student to integrate the discussion's main tensions, mechanisms, material relationships, or view changes without necessarily saying "summarize the discussion" directly.
-7. Student answers all follow-up questions in one response.
+7. Student answers all follow-up questions in one response; in user-participatory mode, that answer may come from the real user rather than from the student agent.
 8. Teacher gives final feedback covering both answer quality and discussion-process quality.
 
 Local-context policy
@@ -72,6 +78,7 @@ Problem-tracking rule
 - The TA should proactively intervene when a must-discuss point has not yet been discussed or when the group keeps citing materials without analyzing their actual content.
 - During free discussion, the orchestrator must require structured JSON from the TA, student, `peer_high`, and `peer_low`, and keep each role's latest end-of-discussion judgment available to the moderator.
 - At minimum, each speaking-role JSON should expose whether the role believes discussion can end, whether the role still wants to speak, and what unresolved confusion or issue remains.
+- In user-participatory mode, the runtime should treat user-raised speaking intent for the `student` role as first-class state, so the moderator can compare the student's effective speaking intent against the peers' and TA's current state in a uniform way.
 
 Ending rule
 

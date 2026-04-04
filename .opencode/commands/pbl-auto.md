@@ -1,15 +1,16 @@
 ---
-description: 通过原生 OpenCode 多子智能体工作流启动一次完整的 PBL 讨论。
+description: 通过原生 OpenCode 多子智能体工作流启动一次完整的全自动 PBL 讨论。
 agent: pbl-orchestrator
 ---
 ## 适配定位
 
-- 本文件是 `/pbl` 的命令入口。
-- 完整阶段顺序、子智能体调用要求与转录实时落盘要求以 `.opencode/skills/pbl-orchestrator/SKILL.md` 为准。
+- 本文件是 `/pbl-auto` 的命令入口。
+- 本命令只覆盖全自动模式。
+- 完整阶段顺序、子智能体调用要求与转录实时落盘要求以 `.opencode/skills/pbl-orchestrator/SKILL.md` 中的 `Full-Auto Workflow` 为准。
 
 ## 运行要求
 
-- 以中文启动一场完整的 PBL 讨论。
+- 以中文启动一场完整的全自动 PBL 讨论。
 - 用户提供的话题：`$ARGUMENTS`
 - 必须按阶段真实调用对应 `pbl-*` 子智能体推进，不得由编排器自行代写任何角色发言。
 - 任何角色、材料包、教师追问、学生作答、教师终评一旦生成可公开正文，都要立刻写入转录文件，而不是攒到结束时一次性落盘。
