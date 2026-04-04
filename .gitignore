@@ -1,2 +1,9 @@
 data/transcripts
+data/runtime-*/
+data/runtime/current_session.txt
+data/runtime/latest_session.txt
+data/runtime/logs/
+data/runtime/sessions/
+pbl_runtime/__pycache__/
+*.pyc
 suggestion.md
